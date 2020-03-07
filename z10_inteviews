@@ -1,0 +1,20 @@
+
+
+ + What tier is used in S3?
+
+
+ + When u read a large file of 10GB, how does partition get allocated in spark
+   and what would be the no of executors & cores you will be using ?
+
+ + Explain bucketing in Hive?
+
+ + Shared variable
+    + Broadcast variable & accumulator
+
+ + Predicate pushdown in spark?
+
+ + Component of YARN and their functions?
+
+ + Re-balancing in Kafka
+
+ + Application Manager

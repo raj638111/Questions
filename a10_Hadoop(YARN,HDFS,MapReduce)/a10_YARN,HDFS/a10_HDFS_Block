@@ -1,0 +1,28 @@
+
+-- Data Block
+
+    # A file in hdfs is normally split into Blocks and distributed b/w data nodes
+      in HDFS
+
+    # Normal default size
+        + 256 MB
+        + 128 MB
+
+-- What if block size is small?
+
+    # Seek issue
+        + Small files seek data from multiple data nodes
+
+    # Namenode overhead
+        +   As meta info about each block needs to be stored
+            in namenode, which might make the namenode run out
+            of memory
+
+    # Container overhead: Each container
+        +   As each container that works on the block will have
+            less work (Generally in MapReduce, but might be a less
+            issue for spark)
+
+-- What if block size is too large?
+
+    # Obviously parallelism is affected
