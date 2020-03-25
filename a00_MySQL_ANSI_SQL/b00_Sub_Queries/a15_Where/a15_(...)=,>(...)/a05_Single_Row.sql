@@ -1,7 +1,7 @@
 -- Info
 
   + A row subquery returns a single row
-    - More than single row will fail the query
+    - More than single row in subquery will fail the query
 
 -- Data
 
