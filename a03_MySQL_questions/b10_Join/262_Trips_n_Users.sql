@@ -44,6 +44,49 @@ For the above tables, your SQL query should return the following rows with the c
 | 2013-10-03 |       0.50        |
 +------------+-------------------+
 
+-- Solution 2 (This is faster than solution 1)
+  -- (What if the driver is banned, we are not checking that here?)
+select
+    Request_at as Day,
+    round(sum(case when status in ('cancelled_by_driver', 'cancelled_by_client') then 1 else 0 end) /
+      count(*), 2) as 'Cancellation Rate'
+from
+    (select
+        Request_at,
+        Status
+    from
+        (select * from Trips where Request_at >= '2013-10-01' and Request_at <= '2013-10-03') t
+    join
+        (select * from Users where Banned = 'No') u
+    on
+        t.Client_id = u.Users_id)a
+group by
+    a.Request_at
+
+
+-- Solution 1
+
+select
+Request_at as Day,
+round((sum(case when status in ('cancelled_by_driver',
+'cancelled_by_client') then 1 else 0 end) / count(*)), 2)
+  as 'Cancellation Rate'
+from
+  (select t.* from
+  (select * from Trips where Request_at >= '2013-10-01' and Request_at <= '2013-10-03')  t
+  inner join
+  Users u1
+  on
+  t.Client_Id = u1.User_Id and u1.Banned = 'No'
+  inner join
+  Users u2
+  on
+  t.Driver_Id = u2.User_Id and u2.Banned = 'No') a
+group by
+a.Request_at
+
+
+
 -- Sample 1
 
 drop table Trips;
@@ -107,48 +150,4 @@ insert into Users
 values
   (1, 'No', 'client'),
   (10, 'No', 'driver');
-
-
--- Solution 1
-
-select
-Request_at as Day,
-round((sum(case when status in ('cancelled_by_driver',
-'cancelled_by_client') then 1 else 0 end) / count(*)), 2)
-  as 'Cancellation Rate'
-from
-  (select t.* from
-  (select * from Trips where Request_at >= '2013-10-01' and Request_at <= '2013-10-03')  t
-  inner join
-  Users u1
-  on
-  t.Client_Id = u1.User_Id and u1.Banned = 'No'
-  inner join
-  Users u2
-  on
-  t.Driver_Id = u2.User_Id and u2.Banned = 'No') a
-group by
-a.Request_at
-
-
-
--- Solution 2 (This is faster than solution 1)
-
-select
-    Request_at as Day,
-    round(sum(case when status in ('cancelled_by_driver', 'cancelled_by_client') then 1 else 0 end) /
-      count(*), 2) as 'Cancellation Rate'
-from
-    (select
-        Request_at,
-        Status
-    from
-        (select * from Trips where Request_at >= '2013-10-01' and Request_at <= '2013-10-03') t
-    join
-        (select * from Users where Banned = 'No') u
-    on
-        t.Client_id = u.Users_id)a
-group by
-    a.Request_at
-
 

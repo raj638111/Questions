@@ -1,5 +1,9 @@
 
 
+
+
+
+
 master dns: ec2-18-212-220-172.compute-1.amazonaws.com
 
 cd ~/Desktop/spark;

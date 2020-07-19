@@ -1,5 +1,6 @@
 
-Suppose that a website contains two tables, the Customers table and the Orders table. Write a SQL query to find all customers who never order anything.
+Suppose that a website contains two tables, the Customers table and the Orders table.
+Write a SQL query to find all customers who never order anything.
 
 Table: Customers.
 
@@ -30,12 +31,36 @@ Using the above tables as example, return the following:
 | Max       |
 +-----------+
 
+-- Solution 3 (Join) > 60%
+
+select
+  Name as Customers
+from
+  Customers c
+left join
+  Orders o
+on c.Id = o.CustomerId
+where o.CustomerId is null;
+
+
+-- Solution 1 (> 35%)
+
 select
   Name as Customers
 from
   Customers
 where
   Id not in (select CustomerId from Orders)
+
+-- Solution 2 ( > 54% )
+
+select Name as Customers
+from Customers c
+where (
+  select count(*) from Orders o where
+  c.Id = o.Id
+) = 0;
+
 
 === Example (using different methods; where in, where count) ===
 

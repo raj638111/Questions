@@ -28,7 +28,7 @@ question 285 has answer rate 1/1, while question 369 has 0/1 answer rate, so out
 
 Note: The highest answer rate meaning is: answer number's ratio in show number in the same question.
 
--- Solution
+-- Solution 1 (92 %)
 
 select survey_log from
 (select q.question_id as survey_log,
@@ -42,3 +42,20 @@ from survey_log where action = 'answer' group by question_id) a
 on q.question_id = a.question_id
 order by ratio
 desc limit 1)z
+
+
+-- Solution 2 (61%)
+
+select
+  survey_log
+from
+(select
+  question_id as survey_log,
+  sum(case when action = 'show' then 1 else 0 end) as showed,
+  sum(case when action = 'answer' then 1 else 0 end) as answered
+from
+  survey_log
+group by
+  question_id)a
+order by (answered / showed) desc limit 1;
+

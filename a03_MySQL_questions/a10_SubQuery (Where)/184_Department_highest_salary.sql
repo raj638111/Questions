@@ -29,6 +29,97 @@ Write a SQL query to find employees who have the highest salary in each of the d
 | Sales      | Henry    | 80000  |
 +------------+----------+--------+
 
+-- Solution 4 (join) > 92%
+
+select
+  d.Name as Department,
+  e.Name as Employee,
+  e.Salary as Salary
+from
+  Employee e
+join
+  (select DepartmentId, max(Salary) as Salary from Employee group by DepartmentId) t
+on
+  e.DepartmentId = t.DepartmentId and
+  e.Salary = t.Salary
+join
+  Department d
+on e.DepartmentId = d.Id;
+
+
+
+-- Solution 1 (where) > 7.5%
+
+select
+    d.Name as Department,
+    e1.Name as Employee,
+    e1.Salary as Salary
+from
+    Employee e1
+join
+    Department d
+on
+    e1.DepartmentId = d.Id
+where
+    (
+        select
+            count(*) as count
+        from
+            Employee e2
+        where
+            e2.DepartmentId = e1.DepartmentId and
+            e2.Salary > e1.Salary and
+            e2.Id not in (e1.Id)
+    ) = 0
+
+-- Solution 2 (where)
+
+SELECT
+    Department.name AS 'Department',
+    Employee.name AS 'Employee',
+    Salary
+FROM
+    Employee
+JOIN
+    Department
+ON
+  Employee.DepartmentId = Department.Id
+WHERE
+    (Employee.DepartmentId , Salary) IN
+    (   SELECT
+            DepartmentId, MAX(Salary)
+        FROM
+            Employee
+        GROUP BY DepartmentId
+	)
+;
+
+-- Solution 3 (where)
+
+select a.Name, d.Name
+from
+(select
+  Name, DepartmentId
+from
+  Employee e1
+where
+  (
+    select count(*) from Employee e2
+    where e2.Salary > e1.salary and
+    e2.DepartmentId = e1.DepartmentId
+  ) = 0 )a
+join
+Department d
+on a.DepartmentId = d.Id;
+
++-------+-------+
+| Name  | Name  |
++-------+-------+
+| Jim   | IT    |
+| Henry | Sales |
+| Max   | IT    |
++-------+-------+
+
 
 -- Data 1
 
@@ -65,74 +156,3 @@ values
   (1, "IT"),
   (2, "Sales");
 
-
-
--- Solution 1
-
-select
-    d.Name as Department,
-    e1.Name as Employee,
-    e1.Salary as Salary
-from
-    Employee e1
-join
-    Department d
-on
-    e1.DepartmentId = d.Id
-where
-    (
-        select
-            count(*) as count
-        from
-            Employee e2
-        where
-            e2.DepartmentId = e1.DepartmentId and
-            e2.Salary > e1.Salary and
-            e2.Id not in (e1.Id)
-    ) = 0
-
--- Solution 2
-
-SELECT
-    Department.name AS 'Department',
-    Employee.name AS 'Employee',
-    Salary
-FROM
-    Employee
-        JOIN
-    Department ON Employee.DepartmentId = Department.Id
-WHERE
-    (Employee.DepartmentId , Salary) IN
-    (   SELECT
-            DepartmentId, MAX(Salary)
-        FROM
-            Employee
-        GROUP BY DepartmentId
-	)
-;
-
--- Solution 3
-
-select a.Name, d.Name
-from
-(select
-  Name, DepartmentId
-from
-  Employee e1
-where
-  (
-    select count(*) from Employee e2
-    where e2.Salary > e1.salary and
-    e2.DepartmentId = e1.DepartmentId
-  ) = 0 )a
-join
-Department d
-on a.DepartmentId = d.Id;
-
-+-------+-------+
-| Name  | Name  |
-+-------+-------+
-| Jim   | IT    |
-| Henry | Sales |
-| Max   | IT    |
-+-------+-------+

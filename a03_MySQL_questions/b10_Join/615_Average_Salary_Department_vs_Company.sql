@@ -55,17 +55,17 @@ case when a.amount = b.amount then 'same'
      when a.amount > b.amount then 'higher'
      else 'lower' end as comparison
 from
-(select date_format(s.pay_date, '%Y-%m') as pay_month, e.department_id,
-avg(s.amount) as amount
-from
-salary s
+  (select date_format(s.pay_date, '%Y-%m') as pay_month, e.department_id,
+  avg(s.amount) as amount
+  from
+  salary s
+  join
+  employee e
+  on s.employee_id = e.employee_id
+  group by date_format(s.pay_date, '%Y-%m'), e.department_id)a
 join
-employee e
-on s.employee_id = e.employee_id
-group by date_format(s.pay_date, '%Y-%m'), e.department_id)a
-join
-(select date_format(pay_date, '%Y-%m') as pay_month, avg(amount) as amount
-from salary
-group by date_format(pay_date, '%Y-%m'))b
+  (select date_format(pay_date, '%Y-%m') as pay_month, avg(amount) as amount
+  from salary
+  group by date_format(pay_date, '%Y-%m'))b
 on a.pay_month = b.pay_month
 

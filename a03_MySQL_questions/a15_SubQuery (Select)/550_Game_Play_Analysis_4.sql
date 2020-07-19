@@ -37,6 +37,60 @@ Result table:
 +-----------+
 Only the player with id 1 logged back in after the first day he had logged in so the answer is 1/3 = 0.33
 
+
+-- Solution 1 (Join)
+
+select
+    round(count(a.player_id)/(select count(distinct player_id)
+                              from Activity),2) as fraction
+from
+    Activity a
+left join
+    (select player_id, min(event_date) as mineventdate from Activity
+     group by player_id) t
+on
+    a.event_date= t.mineventdate+1 and
+    a.player_id=t.player_id
+where t.mineventdate is not null
+
+-- Solution 2 (Join): Similar to above except that ; total count is
+  -- moved to join ; instead of being used as subquery in select
+
+select round((x.consecutiveTotal / y.total), 2) as fraction from
+(select
+    count(a.player_id) as consecutiveTotal
+from
+    Activity a
+join
+    (select player_id, min(event_date) as mineventdate from Activity
+     group by player_id) t
+on
+    a.event_date= t.mineventdate+1 and
+    a.player_id=t.player_id) x
+join
+(select count(distinct player_id) as total from Activity) y
+
+
+-- Result 2 (Join): This is difficult to read
+
+select
+round((select count(*) from
+(select player_id, min(event_date) as event_date
+from Activity group by player_id)a
+join
+Activity b
+on  date_add(a.event_date, INTERVAL 1 DAY) = b.event_date and
+    a.player_id = b.player_id) / (
+    select count(distinct player_id) from Activity), 2) as fraction
+
++----------+
+| fraction |
++----------+
+|     0.33 |
++----------+
+
+
+
 -- Data
 
 drop table Activity;
@@ -56,39 +110,4 @@ values
   (2, 3, '2017-06-25', 1),
   (3, 1, '2016-03-02', 0),
   (3, 4, '2018-07-03', 5);
-
-
--- Result 1 (Join)
-
-select
-    round(count(a.player_id)/(select count(distinct player_id)
-                              from Activity),2) as fraction
-from
-    Activity a
-left join
-    (select player_id, min(event_date) as mineventdate from Activity
-     group by player_id) t
-on
-    a.event_date= t.mineventdate+1 and
-    a.player_id=t.player_id
-where t.mineventdate is not null
-
-
--- Result 2 (Join)
-
-select
-round((select count(*) from
-(select player_id, min(event_date) as event_date
-from Activity group by player_id)a
-join
-Activity b
-on  date_add(a.event_date, INTERVAL 1 DAY) = b.event_date and
-    a.player_id = b.player_id) / (
-    select count(distinct player_id) from Activity), 2) as fraction
-
-+----------+
-| fraction |
-+----------+
-|     0.33 |
-+----------+
 

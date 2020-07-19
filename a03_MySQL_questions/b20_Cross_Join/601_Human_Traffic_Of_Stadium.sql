@@ -29,7 +29,7 @@ For the sample data above, the output is:
 Note:
 Each day only have one row record, and the dates are increasing with id increasing.
 
--- Solution 4 (User solution) (This also works)
+-- Solution 4 (User solution) (Cross Join)
 -- Comparison based on date is not working..ie Solution 2, Solution 1
 
 select distinct t1.*
@@ -47,7 +47,7 @@ order by t1.id
 ;
 
 
--- Solution 3(This works)
+-- Solution 3(SubQuery in Select)
 -- Comparison based on date is not working..ie Solution 2, Solution 1
 
 select a.id, a.visit_date, a.people
@@ -68,6 +68,11 @@ where
 ((a.yesterdayPeople >= 100 and a.tomorrowPeople >= 100) or
 (a.yesterdayPeople >= 100 and a.dayBeforeYesterdayPeople >= 100) or
 (a.tomorrowPeople >= 100 and a.dayAfterTomorrowPeople >= 100))
+
+
+
+
+
 
 
 -- Solution 2 (This also do not work for one of the use case)

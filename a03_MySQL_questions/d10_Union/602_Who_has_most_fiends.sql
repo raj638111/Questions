@@ -31,7 +31,8 @@ The person with id '3' is a friend of people '1', '2' and '4', so he has 3 frien
 Follow-up:
 In the real world, multiple people could have the same most number of friends, can you find all these people in this case?
 
--- Solution
+
+-- Solution 1
 
 select id, sum(count) as num
 from

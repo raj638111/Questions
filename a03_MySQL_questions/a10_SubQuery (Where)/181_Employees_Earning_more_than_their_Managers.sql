@@ -19,7 +19,18 @@ Given the Employee table, write a SQL query that finds out employees who earn mo
 | Joe      |
 +----------+
 
--- Solution
+-- Solution 2 (Inner Join) (> 57.43%)
+
+select
+a.Name as Employee
+from
+  Employee a
+join
+  Employee b
+on a.ManagerId = b.Id
+on a.Salary > b.Salary;
+
+-- Solution 1 (faster than 16%)
 
 select
     Name as Employee

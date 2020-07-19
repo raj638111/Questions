@@ -43,16 +43,7 @@ For the player with id 1, 5 + 6 = 11 games played by 2016-05-02, and 5 + 6 + 1 =
 For the player with id 3, 0 + 5 = 5 games played by 2018-07-03.
 Note that for each player we only care about the days when the player logged in.
 
--- Result 1 (Ranking ??? pending)
-
-select
-  player_id,
-  event_date
-from
-  Activity
-
 -- Result 2 (Join)
-
 
 select
     a.player_id,
@@ -69,5 +60,16 @@ group by
     a.player_id, a.event_date;
 
 
---
+
+-- Result 1 (Subquery in Select) (Gets time limit exceeded)
+
+select
+  player_id,
+  event_date,
+  (select sum(b.games_played) from Activity b where b.event_date <= a.event_date
+   and a.player_id = b.player_id)
+    as games_played_so_far
+from
+  Activity a
+
 

@@ -33,7 +33,17 @@ Write a SQL query to find employees who earn the top three salaries in each of t
 | Sales      | Sam      | 60000  |
 +------------+----------+--------+
 
---
+-- Join
+
+select
+  *,
+  dense_rank() over (partition by DepartmentId order by Salary desc) as rnk
+from
+  Employee
+where rnk in (1, 2, 3)
+
+
+-- Where
 
 select
     d.Name as Department,
