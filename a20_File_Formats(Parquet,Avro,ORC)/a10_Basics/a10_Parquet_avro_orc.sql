@@ -1,6 +1,7 @@
 
 
 -- avro
+
     # Row based file format
     # Schema evolution
         + Schema can be stored separately. Generally in .avsc file

@@ -3,8 +3,8 @@
 -- Which compression to use?
 
   # snappy is recommened as,
-    + Is is splittable
-    + Less intensive on CPU
+    + Is splittable
+    + Less intensive on CPU (ie Faster to compress & decompress)
     + Disadvantage
       - Do not compress that much vis-a-vis gzip or bzip2
 

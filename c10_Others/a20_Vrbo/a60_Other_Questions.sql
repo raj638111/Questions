@@ -19,7 +19,7 @@
 
 -- Cross device tracking
 
-  + MaxMind is used for GA
+  + Tapad is used for GA
 
   + Custom Keychain is used to identify the user
     connecting across multiple devices...as well as from

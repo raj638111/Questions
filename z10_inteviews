@@ -1,13 +1,10 @@
 
 
-+ Data Lineage?
+ + Data Lineage?
 
-+ How does spark compute the lost partition using data lineage
-
+ + How does spark compute the lost partition using data lineage
 
  + What tier is used in S3?
-
-
 
  + Predicate pushdown in spark?
 
@@ -18,5 +15,3 @@
  + Application Manager
 
  + CAP Theorem & Kafka
-
- +

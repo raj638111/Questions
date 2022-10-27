@@ -1,6 +1,6 @@
 
 # CAP Theorem says only 2 of the 3 attributes can be achieved
-  We can still achive 3rd attribute, but not close to 100%
+  We can still achieve 3rd attribute, but not close to 100%
 
 -- Consistency
 

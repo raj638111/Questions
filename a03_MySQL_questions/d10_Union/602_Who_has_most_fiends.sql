@@ -1,7 +1,7 @@
 
 In social network like Facebook or Twitter, people send friend requests and accept others' requests as well.
 
- Table request_accepted
+Table request_accepted
 
 +--------------+-------------+------------+
 | requester_id | accepter_id | accept_date|
